@@ -133,7 +133,7 @@ public class UserApiControllerTests {
 		Long userId = 123L;
 		String requestURI = END_POINT_PATH + "/" + userId;
 		
-		Mockito.doThrow(UserNotFoundException.class).when(service).delete(userId);;
+		Mockito.doThrow(UserNotFoundException.class).when(service).delete(userId);
 		
 		mockMvc.perform(delete(requestURI))
 			.andExpect(status().isNotFound())
@@ -145,7 +145,7 @@ public class UserApiControllerTests {
 		Long userId = 123L;
 		String requestURI = END_POINT_PATH + "/" + userId;
 		
-		Mockito.doNothing().when(service).delete(userId);;
+		Mockito.doNothing().when(service).delete(userId);
 		
 		mockMvc.perform(delete(requestURI))
 			.andExpect(status().isNoContent())
