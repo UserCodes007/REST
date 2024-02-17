@@ -2,6 +2,7 @@ package code;
 
 import java.util.Objects;
 
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
@@ -13,20 +14,25 @@ import jakarta.validation.constraints.NotBlank;
 public class User {
 	
 	@Id
+	@Schema(example = "99")
 	private Long id;
 	
 	@Column(length = 50, nullable = false, unique = true)
 	@NotBlank(message = "E-mail address must not be empty")
 	@Email(message = "User must have valid email address")
+	@Schema(example = "Abhi@gmail.com")
 	private String email;
 	
 	@Column(length = 20, nullable = false)
+	@Schema(example = "Abhiram")
 	private String firstName;
 	
 	@Column(length = 20, nullable = false)
+	@Schema(example = "Pasupuleti")
 	private String lastName;
 	
 	@Column(length = 10, nullable = false)
+	@Schema(example = "Azx$j")
 	private String password;
 
 	public Long getId() {
