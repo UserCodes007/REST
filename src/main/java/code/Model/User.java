@@ -1,4 +1,4 @@
-package code;
+package code.Model;
 
 import java.util.Objects;
 

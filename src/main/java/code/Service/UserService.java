@@ -1,8 +1,11 @@
-package code;
+package code.Service;
 
 import java.util.List;
 import java.util.Optional;
 
+import code.Model.User;
+import code.Exceptions.UserNotFoundException;
+import code.Repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

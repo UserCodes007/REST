@@ -1,12 +1,15 @@
-package code;
+package code.Controller;
 
 import java.net.URI;
 import java.util.List;
 
+import code.Service.UserService;
+import code.Model.User;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
 import io.swagger.v3.oas.annotations.media.ArraySchema;
 import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.ExampleObject;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
@@ -58,19 +61,17 @@ public class UserApiController {
 					mediaType = "application/json",
 					schema = @Schema(implementation = User.class))
 			},responseCode = "200", description = "Successfully retrieved"),
-			@ApiResponse(responseCode = "404", description = "Not found - User not found"),
+			@ApiResponse(content = {@Content(
+					mediaType = "text/plain",
+					schema = @Schema(implementation = String.class),
+					examples = @ExampleObject(value = "No User found in db with the given id to perform the operation"))
+			},responseCode = "404", description = "Not found - User not found"),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	})
 	@GetMapping("/{id}")
 	public ResponseEntity<?> get(@PathVariable("id") @Parameter(name = "id", description = "User Details", example = "99" ) Long id) {
-		try {
 			User user = service.get(id);
 			return ResponseEntity.ok(user);
-			
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			return ResponseEntity.notFound().build();
-		}
 	}
 
 	//this control method returns all users available as a list
@@ -93,44 +94,39 @@ public class UserApiController {
 		return ResponseEntity.ok(listUsers);
 	}
 
-	//
-
 	@Operation(summary = "Update User By Id", description = "Updates and returns Updated User Details")
 	@ApiResponses(value = {
 			@ApiResponse(content = {@Content(
 					mediaType = "application/json",
 					schema = @Schema(implementation = User.class))
 			},responseCode = "200", description = "Successfully Updated"),
-			@ApiResponse(responseCode = "400", description = "Not found - User not found"),
+			@ApiResponse(content = {@Content(
+					mediaType = "text/plain",
+					schema = @Schema(implementation = String.class),
+					examples = @ExampleObject(value = "No User found in db with the given id to perform the operation"))
+			},responseCode = "404", description = "Not found - User not found"),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	})
 	@PutMapping("/{id}")
 	public ResponseEntity<?> update(@PathVariable("id") @Parameter(name = "id", description = "User id", example = "99" ) Long id, @RequestBody @Valid @Parameter(name = "User", description = "User Details") User user) {
-		try {
 			user.setId(id);
 			User updatedUser = service.update(user);			
 			return ResponseEntity.ok(updatedUser);
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			return ResponseEntity.notFound().build();
-		}		
 	}
 
 	@Operation(summary = "Delete User By Id", description = "Deletes and returns status about User deletion")
 	@ApiResponses(value = {
 			@ApiResponse(responseCode = "204", description = "No Content about the Specified User"),
-			@ApiResponse(responseCode = "404", description = "Not found - User not found"),
+			@ApiResponse(content = {@Content(
+					mediaType = "text/plain",
+					schema = @Schema(implementation = String.class),
+					examples = @ExampleObject(value = "No User found in db with the given id to perform the operation"))
+			},responseCode = "404", description = "Not found - User not found"),
 			@ApiResponse(responseCode = "500", description = "Internal Server Error")
 	})
 	@DeleteMapping("/{id}")
 	public ResponseEntity<?> delete(@PathVariable("id") @Parameter(name = "id", description = "User id", example = "99" )  Long id) {
-		try {
 			service.delete(id);
 			return ResponseEntity.noContent().build();
-			
-		} catch (UserNotFoundException e) {
-			e.printStackTrace();
-			return ResponseEntity.notFound().build();
-		}
 	}
 }
